@@ -8,21 +8,62 @@ from django.db import models
 
 
 class Planet(models.Model):
-    # Fill in
-    pass
+    name = models.CharField(max_length=100)
+    rotation_period = models.CharField(max_length=40)
+    orbital_period = models.CharField(max_length=40)
+    diameter = models.CharField(max_length=40)
+    climate = models.CharField(max_length=40)
+    gravity = models.CharField(max_length=40)
+    terrain = models.CharField(max_length=40)
+    surface_water = models.CharField(max_length=40)
+    population = models.CharField(max_length=40)
+
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
 
 class People(models.Model):
-    # Fill in
+    
+    name = models.CharField(max_length=100)
+    height = models.CharField(max_length=10, blank=True)
+    mass = models.CharField(max_length=10, blank=True)
+    hair_color = models.CharField(max_length=20, blank=True)
+    skin_color = models.CharField(max_length=20, blank=True)
+    eye_color = models.CharField(max_length=20, blank=True)
+    birth_year = models.CharField(max_length=10, blank=True)
+    gender = models.CharField(max_length=40, blank=True)
+    homeworld = models.ForeignKey(Planet, related_name="residents")
 
-    # https://docs.djangoproject.com/en/1.11/ref/models/fields/#django.db.models.ForeignKey
-    # for homeworld
-    pass
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Species(models.Model):
     # Fill in
-    pass
+
+    name = models.CharField(max_length=40)
+    classification = models.CharField(max_length=40)
+    designation = models.CharField(max_length=40)
+    average_height = models.CharField(max_length=40)
+    skin_colors = models.CharField(max_length=200)
+    hair_colors = models.CharField(max_length=200)
+    eye_colors = models.CharField(max_length=200)
+    average_lifespan = models.CharField(max_length=40)
+    homeworld = models.ForeignKey(Planet, blank=True, null=True)
+    language = models.CharField(max_length=40)
+    people = models.ManyToManyField(People, related_name="species")
+
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Transport(models.Model):
@@ -117,3 +158,4 @@ class Film(models.Model):
 
     def __str__(self):
         return self.title
+
