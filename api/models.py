@@ -9,7 +9,7 @@ from django.db import models
 
 class Planet(models.Model):
     name = models.CharField(max_length=100)
-    rotation_period = models.CharField(max_length=40)
+    rotation_period = models.CharField(max_length=40, blank=True)
     orbital_period = models.CharField(max_length=40)
     diameter = models.CharField(max_length=40)
     climate = models.CharField(max_length=40)
@@ -26,7 +26,7 @@ class Planet(models.Model):
 
 
 class People(models.Model):
-    
+
     name = models.CharField(max_length=100)
     height = models.CharField(max_length=10, blank=True)
     mass = models.CharField(max_length=10, blank=True)
