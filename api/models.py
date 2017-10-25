@@ -125,6 +125,12 @@ class Film(models.Model):
     director = models.CharField(max_length=100)
     producer = models.CharField(max_length=100)
     release_date = models.DateField()
+    likes = models.IntegerField(default=0)
+
+    def like(self):
+        Film.objects.filter(pk=self.pk).update(likes=models.F('likes')+1)
+        self.refresh_from_db()
+
 
     characters = models.ManyToManyField(
         People,
