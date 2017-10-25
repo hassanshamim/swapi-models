@@ -16,7 +16,7 @@ class Planet(models.Model):
     gravity = models.CharField(max_length=40, blank=True)
     terrain = models.CharField(max_length=40, blank=True)
     surface_water = models.CharField(max_length=40, blank=True)
-    population = models.CharField(max_length=40, blank=True)
+    population = models.CharField(max_length=40)
 
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
