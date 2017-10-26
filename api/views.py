@@ -2,42 +2,30 @@ import json
 
 from django.core import serializers
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Planet
+from .serializers import PlanetSerializer
 
 
 @csrf_exempt
 def planet_list(request):
     if request.method == 'GET':
         planets = Planet.objects.all()[:5]
-        planets_dicts = [
-            {
-                'name': planet.name,
-                'population': planet.population,
-                # Etc...
-            }
-            for planet in planets]
-        planets_json = json.dumps(planets_dicts)
-        return HttpResponse(planets_json, content_type='application/json')
+
+        serializer = PlanetSerializer(planets)
+        return JsonResponse(serializer.data)
     else:
         # convert request data from json to a dictionary and create a planet from it
         data = json.loads(request.body)
-        planet = Planet(**data)
-        try:
-            # validate planet data
-            planet.full_clean()
-        except ValidationError as e:
-            errors = json.dumps(e.message_dict)
-            # Return validation errors as json response
-            return HttpResponse(errors, content_type='application/json', status=400)
-        # Save the planet and return the response as json
-        planet.save()
-        planet_json = json.dumps(
-            {'name': planet.name, 'population': planet.population, 'id': planet.id})
-        return HttpResponse(planet_json, content_type='application/json', status=201)
+        serializer = PlanetSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        else:
+            return JsonResponse(serializer.errors, status=400)
 
 
 @csrf_exempt
