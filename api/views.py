@@ -15,7 +15,7 @@ def planet_list(request):
     if request.method == 'GET':
         planets = Planet.objects.all()[:5]
 
-        serializer = PlanetSerializer(planets)
+        serializer = PlanetSerializer(planets, many=True)
         return JsonResponse(serializer.data)
     else:
         # convert request data from json to a dictionary and create a planet from it
